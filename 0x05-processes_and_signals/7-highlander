@@ -3,7 +3,7 @@
 # a sleep 2 in between each iteration.
 # It displays "I am invincible!!!" in between each iteration.
 
-trap 'echo "I am invincible"' SIGTERM
+trap 'echo "I am invincible!!!"; exit' SIGTERM
 
 
 while true
