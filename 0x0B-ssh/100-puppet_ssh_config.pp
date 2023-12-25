@@ -2,7 +2,7 @@
 # SSH client is configured to use the private key ~/.ssh/school
 # SSH client is configured to refuse to authenticate using a password
 
-file { '~/.ssh/config':
+file { '/home/ubuntu/.ssh/config':
   ensure => present,
   owner  => 'ubuntu',
   group  => 'ubuntu',
