@@ -2,16 +2,7 @@
 # SSH client is configured to use the private key ~/.ssh/school
 # SSH client is configured to refuse to authenticate using a password
 
-# Ensure the .ssh directory exists
-file { '/home/ubuntu/.ssh':
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
-  mode   => '0700',
-}
-
-# Manage the SSH configuration file
-file { '/home/ubuntu/.ssh/config':
+file { '~/.ssh/config':
   ensure => present,
   owner  => 'ubuntu',
   group  => 'ubuntu',
@@ -20,7 +11,7 @@ file { '/home/ubuntu/.ssh/config':
     Host 271026-web-01
         HostName 54.236.203.202
         User ubuntu
-        IdentityFile /home/ubuntu/.ssh/school
+        IdentityFile ~/.ssh/school
         PasswordAuthentication no
   ",
 }
