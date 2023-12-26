@@ -2,21 +2,21 @@
 # SSH client is configured to use the private key ~/.ssh/school
 # SSH client is configured to refuse to authenticate using a password
 
-# Ensure the .ssh directory exists
-file { '/home/ubuntu/.ssh':
-  ensure => directory,
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
-  mode   => '0700',
+# Ensure the .ssh directory exists within the user's home directory
+file { '/etc/ssh/ssh_config':
+  ensure => present,
 }
 
-# Manage the SSH configuration file
+# Ensure the PasswordAuthentication line is set to 'no'
 file_line { 'Turn off passwd auth':
-  path  => '/home/ubuntu/.ssh/config',
+  path  => '/etc/ssh/ssh_config',
   line  => 'PasswordAuthentication no',
+  match => '^#PasswordAuthentication',
 }
 
+# Ensure the IdentityFile line is set to '~/.ssh/school'
 file_line { 'Declare identity file':
-  path  => '/home/ubuntu/.ssh/config',
+  path  => '/etc/ssh/ssh_config',
   line  => 'IdentityFile ~/.ssh/school',
+  match => '^#IdentityFile',
 }
