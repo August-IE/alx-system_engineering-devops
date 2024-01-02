@@ -15,6 +15,10 @@ nginx::resource::vhost { 'default':
       ensure  => 'present',
       content => 'Hello World!',
     },
-    '/redirect_me' => redirect('/redirect_me', 'https://google.com'),
+    '/redirect_me' => {
+      ensure       => 'present',
+      redirect     => 'https://www.google.com',
+      redirect_type => 'permanent',
+    },
   },
 }
