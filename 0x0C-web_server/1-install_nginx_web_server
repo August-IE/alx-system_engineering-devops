@@ -1,21 +1,36 @@
 #!/usr/bin/env bash
 # A script that installs nginx on my web-01 server:
 # Nginx should be listening on port 80.
-# It return a page that contains the string "Hello World!" at the root
+# It should return a page that contains the string "Hello World!" at the root
 # with a curl GET request.
 
 apt-get update
 apt-get install -y nginx
 
-mkdir /etc/nginx/html
-touch /etc/nginx/html/index.html
-echo "Hello World!" > /etc/nginx/html/index.html
+# Create the root directory for Nginx
+mkdir /var/www/html
+
+# Create an index.html file with "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Configure Nginx default site to use the new root directory
 printf %s "server {
-     listen      80 default_server;
-     listen      [::]:80 default_server;
-     root        /etc/nginx/html;
-     index       index.html index.htm;
+    listen      80 default_server;
+    listen      [::]:80 default_server;
+    root        /var/www/html;
+    index       index.html index.htm;
+    server_name _;
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
 }
 " > /etc/nginx/sites-available/default
 
+# Remove the default symbolic link to ensure the new configuration is used
+rm /etc/nginx/sites-enabled/default
+
+# Create a new symbolic link to enable the default site
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+# Restart Nginx
 service nginx restart
