@@ -4,15 +4,18 @@
 # It should return a page that contains the string "Hello World!" at the root
 # with a curl GET request.
 
-sudo apt-get -y update
-sudo apt-get install -y nginx
+apt-get update
+apt-get install -y nginx
 
-ufw allow 'Nginx HTTP'
+mkdir /etc/nginx/html
+touch /etc/nginx/html/index.html
+echo "Hello World!" > /etc/nginx/html/index.html
+printf %s "server {
+     listen      80 default_server;
+     listen      [::]:80 default_server;
+     root        /etc/nginx/html;
+     index       index.html index.htm;
+}
+" > /etc/nginx/sites-available/default
 
-mkdir /var/www/html
-echo "Hello World!" > /var/www/html/index.html
-
-# Ensure nginx is listening on port 80
-awk '/listen 80/ {$2=""; print "listen 80;"}' /etc/nginx/sites-available/default > /etc/nginx/sites-available/default.tmp && mv /etc/nginx/sites-available/default.tmp /etc/nginx/sites-available/default
-
-sudo service nginx restart
+service nginx restart
