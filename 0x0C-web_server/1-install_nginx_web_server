@@ -4,29 +4,7 @@
 # It should return a page that contains the string "Hello World!" at the root
 # with a curl GET request.
 
-apt-get update
-apt-get install -y nginx
-
-# Create a backup of the default Nginx configuration
-cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
-
-# Create a basic HTML page with the required content
-echo "Hello World!" > /var/www/html/index.html
-
-# Replace default Nginx configuration to listen on port 80
-echo 'server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-
-        root /var/www/html;
-        index index.html index.htm;
-
-        server_name _;
-
-        location / {
-                try_files $uri $uri/ =404;
-        }
-}' > /etc/nginx/sites-available/default
-
-# Restart Nginx without using systemctl
-service nginx restart
+apt-get -y update
+apt-get -y install nginx
+echo 'Hello World!' > /usr/share/nginx/html/index.html
+service nginx start
