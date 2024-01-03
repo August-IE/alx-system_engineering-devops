@@ -7,30 +7,26 @@
 apt-get update
 apt-get install -y nginx
 
-# Create the root directory for Nginx
-mkdir /var/www/html
+# Create a backup of the default Nginx configuration
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
 
-# Create an index.html file with "Hello World!"
+# Create a basic HTML page with the required content
 echo "Hello World!" > /var/www/html/index.html
 
-# Configure Nginx default site to use the new root directory
-printf %s "server {
-    listen      80 default_server;
-    listen      [::]:80 default_server;
-    root        /var/www/html;
-    index       index.html index.htm;
-    server_name _;
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-}
-" > /etc/nginx/sites-available/default
+# Replace default Nginx configuration to listen on port 80
+echo 'server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-# Remove the default symbolic link to ensure the new configuration is used
-rm /etc/nginx/sites-enabled/default
+        root /var/www/html;
+        index index.html index.htm;
 
-# Create a new symbolic link to enable the default site
-ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+        server_name _;
 
-# Restart Nginx
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}' > /etc/nginx/sites-available/default
+
+# Restart Nginx without using systemctl
 service nginx restart
