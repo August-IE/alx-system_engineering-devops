@@ -7,22 +7,17 @@ sudo apt-get update
 sudo apt-get install -y nginx
 
 # Create the web root directory and index.html file
-sudo mkdir -p /var/www/html
-echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
-
-# Configure Nginx to perform the redirection
-sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
-server {
-    listen      80 default_server;
-    listen      [::]:80 default_server;
-    root        /var/www/html;
-    index       index.html index.htm;
+sudo mkdir /var/www/html
+sudo echo "Hello World!" > /var/www/html/index.html
+printf %s "server {
+     listen      80 default_server;
+     listen      [::]:80 default_server;
+     root        /var/www/html;
+     index       index.html index.htm;
 
     location /redirect_me {
         return 301 http://www.youtube.com/watch?v=QH2-TGUlwu4;
     }
-}
-EOF'
+}" > /etc/nginx/sites-available/default
 
-# Restart Nginx to apply the changes
-sudo service nginx restart
+service nginx restart
