@@ -1,29 +1,21 @@
 #!/usr/bin/env bash
 # A script that creates a custom HTTP header response, but with Puppet.
 
-exec { 'update_package_lists':
+exec { 'update':
   command  => 'sudo apt-get update',
-  logoutput => true,
-  refreshonly => true,
+  provider => shell,
 }
-
-package { 'nginx':
+-> package {'nginx':
   ensure => present,
-  require => Exec['update_package_lists'],
 }
-
-file_line { 'custom_http_header':
+-> file_line { 'header line':
   ensure => present,
   path   => '/etc/nginx/sites-available/default',
-  line   => "  add_header X-Served-By $hostname;",
-  match  => '^\s*location / {',
-  require => Package['nginx'],
-  notify => Exec['restart_nginx'],
+  line   => "	location / {
+  add_header X-Served-By ${hostname};",
+  match  => '^\tlocation / {',
 }
-
-exec { 'restart_nginx':
+-> exec { 'restart service':
   command  => 'sudo service nginx restart',
-  refreshonly => true,
-  subscribe => File_line['custom_http_header'],
+  provider => shell,
 }
-
