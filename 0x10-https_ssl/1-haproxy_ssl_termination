@@ -16,15 +16,25 @@ defaults
     timeout client  10000
     timeout server  10000
     option forwardfor
-    option http-server-close
-    
-listen Augustie.tech
-    bind 0.0.0.0:443 ssl crt /etc/ssl/certs/www.augustie.tech.pem
-    mode http
-    stats enable
-    stats uri /haproxy?stats
+    option  http-server-close
+
+frontend Augustie.tech
+    bind   0.0.0.0:443 ssl crt /etc/letsencrypt/live/www.augustie.tech/fullchain.pem
+    http-request add-header X-Forwarded-Proto https
+    acl    letsencrypt-acl path_beg /.well-known/acme-challenge/
+    use_backend letsencrypt-backend if letsencrypt-acl
+    default_backend www-backend
+
+frontend Augustie.tech-80
+    bind 0.0.0.0:80
+    http-request add-header X-Forwarded-Proto:\ http
+    default_backend www-backend
+
+backend www-backend
     balance roundrobin
-    option httpclose
-    option forwardfor
+    redirect scheme https if !{ ssl_fc }
     server 271026-web-01 100.26.50.102:80 check
     server 271026-web-02 54.162.241.88:80 check
+
+backend letsencrypt-backend
+    server letsencrypt 127.0.0.1:54321
