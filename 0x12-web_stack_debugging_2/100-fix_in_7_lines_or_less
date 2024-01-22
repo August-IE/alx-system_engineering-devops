@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# A script that makes my task #1 configuration <= 7
+if [ "$EUID" -ne 0 ]; then echo "Please run as root."; exit 1; fi
+sed -i -e 's/#user www-data/user nginx/' -e 's/80/8080/g' /etc/nginx/nginx.conf /etc/nginx/sites-available/default
+systemctl restart nginx
