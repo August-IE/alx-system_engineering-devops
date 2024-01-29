@@ -16,13 +16,17 @@ if __name__ == "__main__":
         todos = requests.get(url + "todos", params={"userId": user_id}).json()
 
         tasks = []  # Initialize an empty list to store tasks for this user
-    for t in todos:
-        completed = t.get("completed")
-        title = t.get("title")
-        info = {"username": username, "task": title, "completed": completed}
-        tasks.append(info)
+        for t in todos:
+            completed = t.get("completed")
+            title = t.get("title")
+            info = {
+                "username": username,
+                "task": title,
+                "completed": completed
+                }
+            tasks.append(info)
 
-    all_tasks[user_id] = tasks  # Store tasks for this user in the dictionary
+        all_tasks[user_id] = tasks  # Store tasks for this user in dictionary
 
     filename = "todo_all_employees.json"
 
