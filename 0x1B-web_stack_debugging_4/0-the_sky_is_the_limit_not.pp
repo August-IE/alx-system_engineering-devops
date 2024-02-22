@@ -9,5 +9,5 @@ exec { 'fix-for-nginx':
 # Restart Nginx in order to apply changes
 exec { 'restart nginx':
   command => 'service restart nginx',
-  path    => '/etc/init.d/'
+  path    => '/usr/local/bin/:/bin/'
 }
