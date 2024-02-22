@@ -7,8 +7,8 @@ exec { 'fix--for-nginx':
   provider => 'shell'
 }
 # Restart Nginx in order to apply changes
-exec { 'Restart nginx':
-  command  => 'service nginx restart',
+exec { 'nginx-restart':
+  command  => 'nginx restart',
   path     => '/usr/bin',
   provider => 'shell'
 }
