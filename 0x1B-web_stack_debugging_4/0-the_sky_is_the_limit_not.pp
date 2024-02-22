@@ -4,10 +4,11 @@
 exec { 'fix-for-nginx':
   command => 'echo ULIMIT="-n 2000" > /etc/default/nginx',
   path    => '/usr/local/bin/:/bin/'
+  provider => 'shell'
 }
-
 # Restart Nginx in order to apply changes
 exec { 'restart nginx':
-  command => 'service restart nginx',
-  path    => '/usr/local/bin/:/bin/'
+  command => 'service nginx restart',
+  path    => '/usr/local/bin/:/bin/',
+  provider => 'shell'
 }
