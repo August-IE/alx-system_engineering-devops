@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Function to print hot posts on a given Reddit subreddit."""
 import json
+import requests
 
 
 def top_ten(subreddit):
@@ -13,7 +14,7 @@ def top_ten(subreddit):
     Returns:
         None
     """
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
     headers = {'User-Agent': 'MyRedditBot/1.0'}
     response = requests.get(url, headers=headers, allow_redirects=False)
 
